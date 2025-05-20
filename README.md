@@ -61,8 +61,8 @@ Data Augmentation은 학습 데이터의 다양성을 증가시켜 모델의 일
 ## ⚙️ 설치 및 실행 방법
 
 ```bash
-git clone https://github.com/Lemon-Farm/AI-Experiments.git
-cd AI-Experiments
+git clone https://github.com/Lemon-Farm/AI-Experiments2.git
+cd AI-Experiments2
 ```
 
 각 실험 노트북(`.ipynb`)을 열어 실행하면 결과를 재현할 수 있습니다.
