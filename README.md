@@ -1,70 +1,70 @@
-# 📚 딥러닝 실험 프로젝트
+# 📚 Deep Learning Experiment Project
 
-여러 딥러닝 실험을 통해 이론적 배경을 실제 환경에서 재현하고, 이들이 모델 성능에 미치는 영향을 분석하였습니다.  
-※ 모든 실험은 고정된 random seed 및 3회 반복 수행 후 평균값을 사용했습니다.
+Through various deep learning experiments, the theoretical foundations were reproduced in practice and their effects on model performance were analyzed.  
+※ All experiments were run with a fixed random seed, repeated 3 times, and averaged.
 
-## 📑 목차
+## 📑 Table of Contents
 
 1. [AlexNet_Augmentation](#🟢-alexnet_augmentation)  
-2. [설치 및 실행 방법](#⚙️-설치-및-실행-방법)  
+2. [Installation and Execution](#⚙️-installation-and-execution)  
 
 ---
 
 ## 🟢 AlexNet_Augmentation
 
-### 🎯 목표
+### 🎯 Objective
 
-* 다양한 Data Augmentation 기법을 적용했을 때 AlexNet 모델의 CIFAR-10 성능 변화를 확인  
+* Evaluate how different data augmentation techniques affect AlexNet’s performance on CIFAR-10.
 
-### 🧠 배경
+### 🧠 Background
 
-Data Augmentation은 학습 데이터의 다양성을 증가시켜 모델의 일반화 성능을 높이는 대표적 기법입니다.  
-본 실험에서는 RandomCrop, RandomHorizontalFlip, Cutout(RandomErasing) 등의 기법을 단독 및 조합하여 적용했을 때의 성능 향상 효과를 AlexNet 구조에서 직접 검증합니다.
+Data augmentation increases the diversity of training data to improve model generalization.  
+In this experiment, we directly verify the effect of techniques such as RandomCrop, RandomHorizontalFlip, and Cutout (RandomErasing) alone and in combination on AlexNet.
 
-### 🛠 구현 내용
+### 🛠 Implementation Details
 
-* **코드**: `AlexNet_Augmentation.ipynb`  
-* **프레임워크**: PyTorch  
-* **데이터셋**: CIFAR-10 (학습 20000장 per Class / 테스트 10,000장)  
-* **모델**: 표준 AlexNet 구현  
-* **Augmentation 기법**:  
-  1. None: ToTensor → Normalize(mean, std)  
-  2. RandomCrop(padding=4) → ToTensor → Normalize  
-  3. RandomHorizontalFlip(p=0.5) → ToTensor → Normalize  
-  4. Cutout: ToTensor → Normalize → RandomErasing(p=0.3, scale=(0.02,0.25), ratio=(1.0,1.0), value=mean)  
-  5. All: RandomCrop + RandomHorizontalFlip + ToTensor + Normalize + RandomErasing  
-* **학습 설정**:  
+* **Code**: `AlexNet_Augmentation.ipynb`  
+* **Framework**: PyTorch  
+* **Dataset**: CIFAR-10 (20,000 training images per class / 10,000 test images)  
+* **Model**: Standard AlexNet implementation  
+* **Augmentation techniques**:  
+  1. **None**: ToTensor → Normalize(mean, std)  
+  2. **RandomCrop**: RandomCrop(padding=4) → ToTensor → Normalize  
+  3. **RandomHorizontalFlip**: RandomHorizontalFlip(p=0.5) → ToTensor → Normalize  
+  4. **Cutout**: ToTensor → Normalize → RandomErasing(p=0.3, scale=(0.02, 0.25), ratio=(1.0, 1.0), value=mean)  
+  5. **All**: RandomCrop + RandomHorizontalFlip + ToTensor + Normalize + RandomErasing  
+* **Training setup**:  
   - Optimizer: SGD(lr=0.1, momentum=0.9, weight_decay=5e-4)  
   - Scheduler: MultiStepLR(milestones=[20, 40], gamma=0.2)  
   - Batch size: 512  
   - Epochs: 50  
-  - Worker init 함수: `worker_init_fn` 사용 (seed 고정)  
-  - 반복 실험: 각 설정당 3회  
+  - Worker init function: `worker_init_fn` for seed control  
+  - Repetitions: 3 runs per setting, averaged  
 
-### 📊 결과 요약
+### 📊 Results Summary
 
-| Augmentation             | 평균 정확도 (%) | None 대비 차이 (%) |
-| ------------------------ | --------------: | -----------------: |
-| None                     |          59.19  |              0.00  |
-| RandomCrop               |          64.25  |              5.06  |
-| RandomHorizontalFlip     |          63.39  |              4.20  |
-| Cutout                   |          61.30  |              2.11  |
-| All (조합)               |          66.96  |              7.77  |
+| Augmentation         | Mean Accuracy (%) | Difference vs. None (%) |
+| -------------------- | -----------------: | ----------------------: |
+| None                 |             59.19  |                  0.00   |
+| RandomCrop           |             64.25  |                  5.06   |
+| RandomHorizontalFlip |             63.39  |                  4.20   |
+| Cutout               |             61.30  |                  2.11   |
+| All (combined)       |             66.96  |                  7.77   |
 
-> **관찰**:  
-> - 단일 기법 중 RandomCrop이 약 5.06%로 가장 큰 성능 향상을 보였고, Cutout은 비교적 작은 효과(2.11%)를 보임.  
-> - 모든 기법을 조합한 ‘All’ 적용 시 약 7.77%의 최대 성능 향상을 확인.
-> - Augmentation 기법을 적용한 학습이 일관적으로 성능 향상을 보임을 확인.
+> **Observation**:  
+> - Among single techniques, RandomCrop yielded the largest gain (~5.06%), while Cutout had a modest effect (2.11%).  
+> - The combined ‘All’ setting achieved the highest improvement (~7.77%).  
+> - Applying augmentation consistently boosted performance.
 
 ---
 
-## ⚙️ 설치 및 실행 방법
+## ⚙️ Installation and Execution
 
 ```bash
 git clone https://github.com/Lemon-Farm/AI-Experiments2.git
 cd AI-Experiments2
 ```
 
-각 실험 노트북(`.ipynb`)을 열어 실행하면 결과를 재현할 수 있습니다.
+Open and run the corresponding notebook (.ipynb) to reproduce the results.
 
 ---
